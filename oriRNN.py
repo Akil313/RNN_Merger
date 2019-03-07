@@ -25,11 +25,20 @@ def centAndScale(magData):
     y = [float(row[1]) for row in magData]
     z = [float(row[2]) for row in magData]
 
+    plt.scatter(x, y, label='XY')
+    plt.scatter(x, z, label='XZ')
+    plt.scatter(y, z, label='YZ')
+
+    plt.xlabel('x label')
+    plt.ylabel('y label')
+
+    plt.show()
+
     offset_x = (max(x) + min(x)) / 2
     offset_y = (max(y) + min(y)) / 2
     offset_z = (max(z) + min(z)) / 2
 
-    corrected_mag_data = []
+    corrected_mag_data = np.array([[0, 0, 0]])
 
     for row in magData:
 
@@ -37,13 +46,28 @@ def centAndScale(magData):
         corrected_y = float(row[1]) - offset_y
         corrected_z = float(row[2]) - offset_z
 
-        corrected_mag_data.append([corrected_x, corrected_y, corrected_z])
+        corr_list = np.array([corrected_x, corrected_y, corrected_z])
+        corr_list = corr_list.reshape((1, 3))
+
+        corrected_mag_data = np.append(corrected_mag_data, corr_list, axis=0)
+
+    corrected_mag_data = corrected_mag_data[1:]
+
+    plt.scatter(corrected_mag_data[:, 0], corrected_mag_data[:, 1], label='XY')
+    plt.scatter(corrected_mag_data[:, 0], corrected_mag_data[:, 2], label='XZ')
+    plt.scatter(corrected_mag_data[:, 1], corrected_mag_data[:, 2], label='YZ')
+
+    plt.xlabel('x label')
+    plt.ylabel('y label')
+
+    plt.show()
 
     norm_corr_mag_data = Normalizer().fit_transform(corrected_mag_data)
 
     return norm_corr_mag_data
 
 norm_user1_mag = centAndScale(user1Mag)
+
 
 userTensor1 = np.concatenate((user1Acc, norm_user1_mag), axis=1)
 
