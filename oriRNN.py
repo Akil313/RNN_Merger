@@ -66,10 +66,10 @@ def centAndScale(magData):
 
     return norm_corr_mag_data
 
-norm_user1_mag = centAndScale(user1Mag)
+user1Mag = centAndScale(user1Mag)
 
 
-userTensor1 = np.concatenate((user1Acc, norm_user1_mag), axis=1)
+userTensor1 = np.concatenate((user1Acc, user1Mag), axis=1)
 
 userTensor1Out = user1Output.values
 X1 = torch.as_tensor(userTensor1).float()
